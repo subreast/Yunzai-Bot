@@ -6,8 +6,8 @@ ignore_self: true
 # 被风控时是否尝试用分片发送
 resend: false
 # ffmpeg
-ffmpeg_path: './model/ffmpeg/bin/ffmpeg.exe'
-ffprobe_path: './model/ffmpeg/bin/ffprobe.exe'
+ffmpeg_path: 
+ffprobe_path: 
 
 # chromium其他路径
 chromium_path: 
