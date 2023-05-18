@@ -9,7 +9,7 @@ gsCfg.cpCfg('mys', 'set')
 export class dailyNote extends plugin {
   constructor () {
     super({
-      name: '体力查询',
+      name: '查询',
       dsc: '原神体力、札记查询，米游社签到',
       event: 'message',
       priority: 300,

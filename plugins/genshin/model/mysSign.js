@@ -18,7 +18,6 @@ export default class MysSign extends base {
     this.cfg = gsCfg.getConfig('mys', 'set')
     // 获取token
     this.configSign = gsCfg.getYaml("sign", "token", "defSet");
-    //this.configSign = gsCfg1.getfileYaml(`${_path}/plugins/xiaoyao-cvs-plugin/config/`, "config");
     this.token = this.configSign.getToken || ''
   }
 
