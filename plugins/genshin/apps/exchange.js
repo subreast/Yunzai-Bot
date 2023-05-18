@@ -13,7 +13,7 @@ export class exchange extends plugin {
       priority: 1000,
       rule: [
         {
-          reg: '^#*(直播|前瞻)*兑换码$',
+          reg: '^#?直播|前瞻)*兑换码$',
           fnc: 'getCode'
         },
         {

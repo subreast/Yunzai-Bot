@@ -15,20 +15,20 @@ export class dailyNote extends plugin {
       priority: 300,
       rule: [
         {
-          reg: '^#*(原神|星铁|崩坏星穹铁道|铁道)?(体力|树脂|查询体力)$',
+          reg: '^#?(原神|星铁|崩坏星穹铁道|铁道)?(体力|树脂|查询体力)$',
           fnc: 'note'
         },
         {
-          reg: '^(#*签到)(force)*$',
+          reg: '^(#?签到)(force)*$',
           fnc: 'sign'
         },
         {
-          reg: '^#*(全部签到|签到任务)(force)*$',
+          reg: '^#?(全部签到|签到任务)(force)*$',
           permission: 'master',
           fnc: 'signTask'
         },
         {
-          reg: '^#*(开启|关闭|取消)自动(米游社)*签到$',
+          reg: '^#?(开启|关闭|取消)自动(米游社)*签到$',
           fnc: 'signClose'
         }
       ]

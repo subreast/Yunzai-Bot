@@ -160,7 +160,7 @@ export default class Abyss extends base {
   }
 
   getFloor () {
-    let reg = /^#*[上期]*(深渊|深境|深境螺旋)[上期]*[第]*(9|10|11|12|九|十|十一|十二)层[ |0-9]*$/
+    let reg = /^#?[上期]*(深渊|深境|深境螺旋)[上期]*[第]*(9|10|11|12|九|十|十一|十二)层[ |0-9]*$/
     let floorIndex = this.e.msg.match(reg)
 
     if (!floorIndex) {

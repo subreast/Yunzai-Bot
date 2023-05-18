@@ -13,15 +13,15 @@ export class abbrSet extends plugin {
       priority: 600,
       rule: [
         {
-          reg: '^#*(设置|配置)(.*)(别名|昵称)$',
+          reg: '^#?(设置|配置)(.*)(别名|昵称)$',
           fnc: 'abbr'
         },
         {
-          reg: '^#*删除(别名|昵称)(.*)$',
+          reg: '^#?删除(别名|昵称)(.*)$',
           fnc: 'delAbbr'
         },
         {
-          reg: '^#*(.*)(别名|昵称)$',
+          reg: '^#?(.*)(别名|昵称)$',
           fnc: 'abbrList'
         }
       ]

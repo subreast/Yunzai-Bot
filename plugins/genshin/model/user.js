@@ -118,7 +118,7 @@ export default class User extends base {
       
     }
     if (/星穹列车|Server|无名客/.test(this.region_name)) {
-      msg += "\n星穹铁道支持：\n功能还在咕咕咕~"
+      msg += "\n星穹铁道支持：\n功能还在更新中~"
     }
     msg += '\n 支持绑定多个ck'
     msg = await common.makeForwardMsg(this.e, ['使用命令说明', msg], '绑定成功：使用命令说明')

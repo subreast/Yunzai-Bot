@@ -13,19 +13,19 @@ export class calculator extends plugin {
       priority: 700,
       rule: [
         {
-          reg: '^#*角色(养成|计算|养成计算)$',
+          reg: '^#?角色(养成|计算|养成计算)$',
           fnc: 'calculatorHelp'
         },
         {
-          reg: '^#*(.*)(养成|计算)([0-9]|,|，| )*$',
+          reg: '^#?(.*)(养成|计算)([0-9]|,|，| )*$',
           fnc: 'Calculator'
         },
         {
-          reg: '^#*尘歌壶(模数)?(养成|计算|养成计算)$',
+          reg: '^#?尘歌壶(模数)?(养成|计算|养成计算)$',
           fnc: 'blueprintHelp'
         },
         {
-          reg: '^#*尘歌壶(模数|养成|养成计算)(\\d{10,15})$',
+          reg: '^#?尘歌壶(模数|养成|养成计算)(\\d{10,15})$',
           fnc: 'Blueprint'
         },
       ]

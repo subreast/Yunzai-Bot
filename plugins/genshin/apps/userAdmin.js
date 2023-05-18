@@ -12,13 +12,13 @@ export class user extends plugin {
       event: 'message',
       priority: 300,
       rule: [{
-        reg: '^#用户统计$',
+        reg: '^#?用户统计$',
         fnc: 'userAdmin'
       }, {
-        reg: '^#(刷新|重置)用户(缓存|统计|ck|Ck|CK)$',
+        reg: '^#?(刷新|重置)用户(缓存|统计|ck|Ck|CK)$',
         fnc: 'resetCache'
       }, {
-        reg: '^#删除(无效|失效)(用户|ck|Ck|CK)$',
+        reg: '^#?删除(无效|失效)(用户|ck|Ck|CK)$',
         fnc: 'delDisable'
       }]
     })

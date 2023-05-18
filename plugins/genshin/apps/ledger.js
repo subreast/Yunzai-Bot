@@ -12,20 +12,20 @@ export class ledger extends plugin {
       priority: 300,
       rule: [
         {
-          reg: '^(#*原石|#*札记)([0-9]|[一二两三四五六七八九十]+)*月*$',
+          reg: '^(#?原石|#?札记)([0-9]|[一二两三四五六七八九十]+)*月*$',
           fnc: 'ledger'
         },
         {
-          reg: '^#原石任务$',
+          reg: '^#?原石任务$',
           permission: 'master',
           fnc: 'ledgerTask'
         },
         {
-          reg: '^#*(原石|札记)统计$',
+          reg: '^#?(原石|札记)统计$',
           fnc: 'ledgerCount'
         },
         {
-          reg: '^#*(去年|今年|\\d{4}年)(原石|札记)统计$',
+          reg: '^#?(去年|今年|\\d{4}年)(原石|札记)统计$',
           fnc: 'ledgerCountHistory'
         }
       ]
