@@ -6,7 +6,7 @@ import MysUser from './MysUser.js'
 import DailyCache from './DailyCache.js'
 import common from '../../../../lib/common/common.js'
 export default class MysInfo {
-  static tips = '请先#绑定cookie\n发送【体力帮助】查看配置教程'
+  static tips = '请先#绑定cookie\n发送【#ck帮助】查看配置教程'
 
   constructor(e) {
     if (e) {
