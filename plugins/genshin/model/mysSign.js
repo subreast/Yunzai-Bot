@@ -210,7 +210,7 @@ export default class MysSign extends base {
       return true
     }
 
-    if (sign.data && sign.data.risk_code === 375) {
+    if (sign.data === 375) {
       this.signMsg = '验证码失败'
       sign.message = '验证码失败'
       this.is_verify = true
@@ -233,7 +233,7 @@ export default class MysSign extends base {
             headers: header
           }
           sign = await this.mysApi.getData('bbs_sign', data)
-          if (sign.data && sign.data.risk_code === 375) {
+          if (sign.data === 375) {
             logger.mark(`[原神签到失败]${this.log}：${sign.message} 第${this.ckNum}个`)
             return false
           } else {
