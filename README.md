@@ -26,6 +26,5 @@ node app
 
 
 ## 其他
-- 已经默认配置好ffmpeg来支持语音相关功能,相关模块在根目录model文件夹下，默认配置在./config/default_config/bot.yaml
 - ./resource/localimg/imgs路径下图片素材来源于网络，仅供个人使用，不得传播，该路径下的图片用于支持sese-plugin某些功能
 - 严禁用于任何商业用途和非法行为
