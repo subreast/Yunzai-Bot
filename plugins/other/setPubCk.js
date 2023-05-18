@@ -21,7 +21,7 @@ export class setPubCk extends plugin {
           permission: 'master'
         },
         {
-          reg: '^#使用(全部|用户)ck$',
+          reg: '^#?使用(全部|用户)ck$',
           fnc: 'setUserCk',
           permission: 'master'
         }

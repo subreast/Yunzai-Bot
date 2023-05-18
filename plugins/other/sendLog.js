@@ -13,7 +13,7 @@ export class sendLog extends plugin {
       event: 'message',
       rule: [
         {
-          reg: '^#(运行|错误)*日志[0-9]*(.*)',
+          reg: '^#?(运行|错误)*日志[0-9]*(.*)',
           fnc: 'sendLog',
           permission: 'master'
         }

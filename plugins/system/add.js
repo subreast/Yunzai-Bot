@@ -19,11 +19,11 @@ export class add extends plugin {
       priority: 50000,
       rule: [
         {
-          reg: '^#(全局)?添加(.*)',
+          reg: '^#?(全局)?添加(.*)',
           fnc: 'add'
         },
         {
-          reg: '^#(全局)?删除(.*)',
+          reg: '^#?(全局)?删除(.*)',
           fnc: 'del'
         },
         {
@@ -32,7 +32,7 @@ export class add extends plugin {
           log: false
         },
         {
-          reg: '#(全局)?(表情|词条)(.*)',
+          reg: '#?(全局)?(表情|词条)(.*)',
           fnc: 'list'
         }
       ]

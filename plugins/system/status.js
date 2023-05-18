@@ -5,11 +5,11 @@ export class status extends plugin {
   constructor () {
     super({
       name: '其他功能',
-      dsc: '#状态',
+      dsc: '状态',
       event: 'message',
       rule: [
         {
-          reg: '^#状态$',
+          reg: '^#?状态$',
           fnc: 'status'
         }
       ]

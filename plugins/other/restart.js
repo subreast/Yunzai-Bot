@@ -8,17 +8,17 @@ export class Restart extends plugin {
   constructor (e = '') {
     super({
       name: '重启',
-      dsc: '#重启',
+      dsc: '#?重启',
       event: 'message',
       priority: 10,
       rule: [
         {
-          reg: '^#重启$',
+          reg: '^#?重启$',
           fnc: 'restart',
           permission: 'master'
         },
         {
-          reg: '^#(停机|关机)$',
+          reg: '^#?(停机|关机)$',
           fnc: 'stop',
           permission: 'master'
         }
