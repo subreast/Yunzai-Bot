@@ -61,10 +61,10 @@ export class abbrSet extends plugin {
     if (this.e.isMaster) return true
     /** 管理员 */
     if (abbrSetAuth == 1) {
-      if (!this.e.Botgml.has(this.e.group_id)) {
+      if (!this.e.bot.gml.has(this.e.group_id)) {
         return false
       }
-      if (!this.e.Botgml.get(this.e.group_id).get(this.e.user_id)) {
+      if (!this.e.bot.gml.get(this.e.group_id).get(this.e.user_id)) {
         return false
       }
       if (!this.e.member.is_admin) {
@@ -128,7 +128,7 @@ export class abbrSet extends plugin {
 
     if (!role) return false
 
-    let nameArr = gsCfg.getConfig('role', 'name')
+    let nameArr = gsCfg.getdefSet('role', 'name')
 
     if (!nameArr[role.name]) {
       await this.reply('默认别名设置，不能删除！')
@@ -163,19 +163,19 @@ export class abbrSet extends plugin {
 
     let title = `${role.name}别名，${list.length}个`
 
-    msg = await this.makeForwardMsg(this.e.Botuin, title, msg)
+    msg = await this.makeForwardMsg(this.e.bot.uin, title, msg)
 
     await this.e.reply(msg)
   }
 
   async makeForwardMsg (qq, title, msg) {
-    let nickname = this.e.Botnickname
+    let nickname = this.e.bot.nickname
     if (this.e.isGroup) {
-      let info = await this.e.BotgetGroupMemberInfo(this.e.group_id, qq)
+      let info = await this.e.bot.getGroupMemberInfo(this.e.group_id, qq)
       nickname = info.card ?? info.nickname
     }
     let userInfo = {
-      user_id: this.e.Botuin,
+      user_id: this.e.bot.uin,
       nickname
     }
 
