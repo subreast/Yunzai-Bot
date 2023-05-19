@@ -160,7 +160,7 @@ export class abbrSet extends plugin {
       let num = Number(i) + 1
       msg.push(`${num}.${list[i]}\n`)
     }
-    msg += `可以发送命令【#添加${role.name}别名xxx】添加别名\n发送命令【#删除别名xxx】删除别名`
+    msg.push(`可以发送命令【#添加${role.name}别名】添加别名\n发送命令【#删除别名xxx】删除别名`)
     let title = `${role.name}别名，${list.length}个`
 
     msg = await this.makeForwardMsg(this.e.bot.uin, title, msg)
