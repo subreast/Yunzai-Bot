@@ -9,12 +9,12 @@ const _path = process.cwd()
 let emoticon
 
 export default class MysNews extends base {
-  constructor (e) {
+  constructor(e) {
     super(e)
     this.model = 'mysNews'
   }
 
-  async getNews () {
+  async getNews() {
     let type = 1
     let typeName = '公告'
     if (this.e.msg.includes('资讯')) {
@@ -44,89 +44,16 @@ export default class MysNews extends base {
 
     const param = await this.newsDetail(postId)
 
-    const img = await this.rander(param)
+    const img = await this.render(param)
 
     return await this.replyMsg(img, `崩坏星穹铁道${typeName}：${param.data.post.subject}`)
   }
 
-  async rander (param) {
-    const pageHeight = 7000
-
-    await puppeteer.browserInit()
-
-    if (!puppeteer.browser) return false
-
-    const savePath = puppeteer.dealTpl('mysNews', param)
-    if (!savePath) return false
-
-    const page = await puppeteer.browser.newPage()
-    try {
-      await page.goto(`file://${_path}${lodash.trim(savePath, '.')}`, { timeout: 120000 })
-      const body = await page.$('#container') || await page.$('body')
-      const boundingBox = await body.boundingBox()
-
-      const num = Math.round(boundingBox.height / pageHeight) || 1
-
-      if (num > 1) {
-        await page.setViewport({
-          width: boundingBox.width,
-          height: pageHeight + 100
-        })
-      }
-
-      const img = []
-      for (let i = 1; i <= num; i++) {
-        const randData = {
-          type: 'jpeg',
-          quality: 90
-        }
-
-        if (i != 1 && i == num) {
-          await page.setViewport({
-            width: boundingBox.width,
-            height: parseInt(boundingBox.height) - pageHeight * (num - 1)
-          })
-        }
-
-        if (i != 1 && i <= num) {
-          await page.evaluate(() => window.scrollBy(0, 7000))
-        }
-
-        let buff
-        if (num == 1) {
-          buff = await body.screenshot(randData)
-        } else {
-          buff = await page.screenshot(randData)
-        }
-
-        if (num > 2) await common.sleep(200)
-
-        puppeteer.renderNum++
-        /** 计算图片大小 */
-        const kb = (buff.length / 1024).toFixed(2) + 'kb'
-
-        logger.mark(`[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`)
-
-        img.push(segment.image(buff))
-      }
-
-      await page.close().catch((err) => logger.error(err))
-
-      if (num > 1) {
-        logger.mark(`[图片生成][${this.model}] 处理完成`)
-      }
-      return img
-    } catch (error) {
-      logger.error(`图片生成失败:${this.model}:${error}`)
-      /** 关闭浏览器 */
-      if (puppeteer.browser) {
-        await puppeteer.browser.close().catch((err) => logger.error(err))
-      }
-      puppeteer.browser = false
-    }
+  async render(param) {
+    return await puppeteer.screenshots(this.model, param)
   }
 
-  async newsDetail (postId) {
+  async newsDetail(postId) {
     const res = await this.postData('getPostFull', { gids: 6, read: 1, post_id: postId })
     if (!res) return
 
@@ -140,7 +67,7 @@ export default class MysNews extends base {
     }
   }
 
-  postApi (type, data) {
+  postApi(type, data) {
     let host = 'https://bbs-api-static.mihoyo.com/'
     let param = []
     lodash.forEach(data, (v, i) => param.push(`${i}=${v}`))
@@ -165,7 +92,7 @@ export default class MysNews extends base {
     return host + param
   }
 
-  async postData (type, data) {
+  async postData(type, data) {
     const url = this.postApi(type, data)
     const headers = {
       Referer: 'https://bbs.mihoyo.com/',
@@ -187,7 +114,7 @@ export default class MysNews extends base {
     return res
   }
 
-  async detalData (data) {
+  async detalData(data) {
     let json
     try {
       json = JSON.parse(data.post.content)
@@ -234,7 +161,7 @@ export default class MysNews extends base {
     return data
   }
 
-  async mysEmoticon () {
+  async mysEmoticon() {
     const emp = new Map()
 
     const res = await this.postData('emoticon', { gids: 6 })
@@ -254,7 +181,7 @@ export default class MysNews extends base {
     return emp
   }
 
-  async replyMsg (img, titile) {
+  async replyMsg(img, titile) {
     if (!img || img.length <= 0) return false
     if (img.length == 1) {
       return img[0]
@@ -265,8 +192,8 @@ export default class MysNews extends base {
       })
     }
   }
-  
-  async mysNewsTask (type = 1) {
+
+  async mysNewsTask(type = 1) {
     let cfg = gsCfg.getConfig('mys', 'pushNews')
 
     // 推送2小时内的公告资讯
@@ -311,7 +238,7 @@ export default class MysNews extends base {
     }
   }
 
-  async sendNews (groupId, typeName, postId) {
+  async sendNews(groupId, typeName, postId) {
     if (!this.pushGroup[groupId]) this.pushGroup[groupId] = 0
     if (this.pushGroup[groupId] >= this.maxNum) return
 
@@ -324,7 +251,7 @@ export default class MysNews extends base {
       logger.mark(`[崩坏星穹铁道${typeName}推送] ${param.data.post.subject}`)
 
       this[postId] = {
-        img: await this.rander(param),
+        img: await this.render(param),
         title: param.data.post.subject
       }
     }
