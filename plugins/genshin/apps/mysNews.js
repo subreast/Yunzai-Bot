@@ -1,6 +1,5 @@
 import plugin from '../../../lib/plugins/plugin.js'
 import MysNews from '../model/mysNews.js'
-import srNews from '../model/srmysNews.js'
 import fs from 'node:fs'
 import lodash from 'lodash'
 import gsCfg from '../model/gsCfg.js'
