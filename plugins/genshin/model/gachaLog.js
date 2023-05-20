@@ -21,18 +21,6 @@ export default class GachaLog extends base {
       { type: 302, typeName: '武器' },
       { type: 200, typeName: '常驻' }
     ]
-    if (e.isSr) {
-      /** 绑定的uid */
-      this.uidKey = `Yz:srJson:mys:qq-uid:${this.userId}`
-
-      this.path = `./data/srJson/${this.e.user_id}/`
-      this.pool = [
-        { type: 11, typeName: '角色' },
-        { type: 12, typeName: '光锥' },
-        { type: 1, typeName: '常驻' },
-        { type: 2, typeName: '新手' }
-      ]
-    }
   }
 
   async logUrl() {
@@ -55,7 +43,7 @@ export default class GachaLog extends base {
       if (i <= 1) await common.sleep(500)
     }
 
-    await this.e.reply(`抽卡记录更新完成，您还可回复\n【#${this?.e?.isSr?'光锥':'武器'}记录】统计武器池数据\n【#角色统计】按卡池统计数据\n【#导出记录】导出记录数据`)
+    await this.e.reply(`抽卡记录更新完成，您还可回复\n【#${this?.e?.isSr ? '光锥' : '武器'}记录】统计武器池数据\n【#角色统计】按卡池统计数据\n【#导出记录】导出记录数据`)
 
     this.isLogUrl = true
 
@@ -202,22 +190,6 @@ export default class GachaLog extends base {
       end_id: 0,
       ...param
     }).toString()
-    if (this.e.isSr) {
-      logUrl = 'https://api-takumi.mihoyo.com/common/gacha_record/api/getGachaLog?'
-      if (!['prod_gf_cn', 'prod_qd_cn'].includes(param.region)) {
-        logUrl = 'https://api-os-takumi.mihoyo.com/common/gacha_record/api/getGachaLog?'
-      }
-      logParam = new URLSearchParams({
-        authkey_ver: 1,
-        lang: 'zh-cn', // 只支持简体中文
-        gacha_type: 11,
-        page: 1,
-        size: 20,
-        game_biz: 'hkrpg_cn',
-        end_id: 0,
-        ...param
-      }).toString()
-    }
     let res = await fetch(logUrl + logParam).catch((err) => {
       logger.error(`[获取抽卡记录失败] ${err}`)
     })
@@ -376,31 +348,27 @@ export default class GachaLog extends base {
   }
 
   getPool() {
-    let msg = this.e.msg.replace(/#|抽卡|记录|祈愿|分析|池|原神|星铁|崩坏星穹铁道|铁道/g, '')
-    this.type = this.e.isSr ? 11 : 301
+    let msg = this.e.msg.replace(/#|抽卡|记录|祈愿|分析|池|原神/g, '')
+    this.type =  301
     this.typeName = '角色'
     switch (msg) {
       case 'up':
       case '抽卡':
       case '角色':
       case '抽奖':
-        this.type = this.e.isSr ? 11 : 301
+        this.type =  301
         this.typeName = '角色'
         break
       case '常驻':
-        this.type = this.e.isSr ? 1 : 200
+        this.type = 200
         this.typeName = '常驻'
         break
       case '武器':
-        this.type = this.e.isSr ? 12 : 302
-        this.typeName = this.e.isSr ? '光锥' : '武器'
-        break
-      case "光锥":
-        this.type = 12
-        this.typeName = '光锥'
+        this.type = 302
+        this.typeName = '武器'
         break
       case "新手":
-        this.type = this.e.isSr ? 2 : 100
+        this.type = 100
         this.typeName = '新手'
         break
     }
@@ -652,7 +620,7 @@ export default class GachaLog extends base {
   /** 渲染数据 */
   randData(data) {
     let line = []
-    let weapon = this.e.isSr ? '光锥' : '武器'
+    let weapon =  '武器'
     if ([301, 11].includes(this.type)) {
       line = [[
         { lable: '未出五星', num: data.noFiveNum, unit: '抽' },
@@ -734,17 +702,17 @@ export default class GachaLog extends base {
     switch (String(uid)[0]) {
       case '1':
       case '2':
-        return this.e.isSr ? 'prod_gf_cn' : 'cn_gf01' // 官服
+        return 'cn_gf01' // 官服
       case '5':
-        return this.e.isSr ? 'prod_qd_cn' : 'cn_qd01' // B服
+        return 'cn_qd01' // B服
       case '6':
-        return this.e.isSr ? 'prod_official_usa' : 'os_usa' // 美服
+        return 'os_usa' // 美服
       case '7':
-        return this.e.isSr ? 'prod_official_euro' : 'os_euro' // 欧服
+        return 'os_euro' // 欧服
       case '8':
-        return this.e.isSr ? 'prod_official_asia' : 'os_asia' // 亚服
+        return 'os_asia' // 亚服
       case '9':
-        return this.e.isSr ? 'prod_official_cht' : 'os_cht' // 港澳台服
+        return 'os_cht' // 港澳台服
     }
     return 'cn_gf01'
   }

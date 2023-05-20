@@ -32,7 +32,7 @@ export class gcLog extends plugin {
           fnc: 'logJson'
         },
         {
-          reg: '^#?(原神|星铁|崩坏星穹铁道|铁道)?(抽卡|抽奖|角色|武器|常驻|up|新手|光锥)池*(记录|祈愿|分析)$',
+          reg: '^#?(原神)?(抽卡|抽奖|角色|武器|常驻|up|新手)池*(记录|祈愿|分析)$',
           fnc: 'getLog'
         },
         {
@@ -48,7 +48,7 @@ export class gcLog extends plugin {
           fnc: 'helpPort'
         },
         {
-          reg: '^#?(原神|星铁|崩坏星穹铁道|铁道)?(抽卡|抽奖|角色|武器|常驻|up|新手|光锥)池*统计$',
+          reg: '^#?(原神)?(抽卡|抽奖|角色|武器|常驻|up|新手|光锥)池*统计$',
           fnc: 'logCount'
         }
       ]
@@ -202,11 +202,6 @@ export class gcLog extends plugin {
   }
   srHead = (url, data) => {
     let name = url
-    if (this.e.isSr) {
-      name = `StarRail/${url}`
-      data.tplFile = `./plugins/genshin/resources/StarRail/html/${url}/${url}.html`
-      data.headStyle = `<style> .head_box { background: url(${this._path}/plugins/genshin/resources/StarRail/img/worldcard/星穹列车.png) #fff; background-position-x: -10px; background-repeat: no-repeat; background-size: 540px; background-position-y: -100px; </style>`
-    }
     return name
   }
   async logCount() {

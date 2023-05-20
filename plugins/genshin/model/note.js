@@ -20,13 +20,8 @@ export default class Note extends base {
     let resUser;
     if (!res || res.retcode !== 0) return false;
     /** 截图数据 */
-    let data = this.e.isSr ? this.noteSr(res) : this.noteData(res);
+    let data = this.noteData(res);
     let screenData = this.screenData;
-    if (this.e.isSr) {
-      screenData.tplFile = "./plugins/genshin/resources/StarRail/html/dailyNote/dailyNote.html";
-        resUser = await MysInfo.get(this.e,'UserGame')
-        if (!resUser || resUser.retcode !== 0) return false;
-    }
     return {
       name: this.e.sender.card,
       quality: 80,

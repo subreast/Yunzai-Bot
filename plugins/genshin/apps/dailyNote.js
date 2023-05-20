@@ -15,7 +15,7 @@ export class dailyNote extends plugin {
       priority: 300,
       rule: [
         {
-          reg: '^#?(原神|星铁|崩坏星穹铁道|铁道)?(体力|树脂|查询体力)$',
+          reg: '^#?(原神)?(体力|树脂|查询体力)$',
           fnc: 'note'
         },
         {
@@ -23,7 +23,7 @@ export class dailyNote extends plugin {
           fnc: 'sign'
         },
         {
-          reg: '^#?(全部签到|签到任务)(force)*$',
+          reg: '^#?全部用户签到(force)*$',
           permission: 'master',
           fnc: 'signTask'
         },

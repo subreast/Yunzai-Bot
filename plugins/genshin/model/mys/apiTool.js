@@ -19,7 +19,6 @@ export default class apiTool {
         this.game = 'genshin'
         // 获取token
         this.configSign = gsCfg.getYaml("sign", "token", "defSet");
-        //this.configSign = gsCfg1.getfileYaml(`${_path}/plugins/xiaoyao-cvs-plugin/config/`, "config");
         this.token = this.configSign.getToken || ''
         if (isSr) this.game = 'honkaisr'
         if (typeof isSr !== 'boolean') {
