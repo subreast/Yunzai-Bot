@@ -40,10 +40,10 @@ export default class RoleBag extends base {
   dealData (avatars) {
     let type = 'all'
     if (avatars.length > 8) {
-      if (/(.*)(四星|4星)(.*)/.test(this.e.msg)) {
+      if (/(.*)(四星|4星|4*)(.*)/.test(this.e.msg)) {
         type = 4
       }
-      if (/(.*)(五星|5星)(.*)/.test(this.e.msg)) {
+      if (/(.*)(五星|5星|5*)(.*)/.test(this.e.msg)) {
         type = 5
       }
     }

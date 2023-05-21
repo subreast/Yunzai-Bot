@@ -17,7 +17,7 @@ export class role extends plugin {
       priority: 200,
       rule: [
         {
-          reg: '^(#?(角色|查询|查询角色|角色查询|人物)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)|(^#?[\\+|＋]*[1|2|5-9][0-9]{8})',
+          reg: '^(#?(角色|角色查询|人物)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)|(^#?[\\+|＋]*[1|2|5-9][0-9]{8})',
           fnc: 'roleIndex'
         },
         {
@@ -25,7 +25,7 @@ export class role extends plugin {
           fnc: 'roleDetail'
         },
         {
-          reg: '^(#?角色3|#?角色卡片|角色)$',
+          reg: '^#?角色卡片$',
           fnc: 'roleCard'
         },
         {
@@ -37,11 +37,11 @@ export class role extends plugin {
           fnc: 'abyssFloor'
         },
         {
-          reg: '^#[五星|四星|5星|4星]*武器[ |0-9]*$',
+          reg: '^#?武器[ |0-9]*$',
           fnc: 'weapon'
         },
         {
-          reg: '^#?(五星|四星|5星|4星|命座|角色|武器)[命座|角色|背包]*[信息|阵容]*[ |0-9]*$',
+          reg: '^#?(五星|四星|5星|4星|5*|4*|命座)[ |0-9]*$',
           fnc: 'roleBag'
         },
         {
@@ -49,7 +49,7 @@ export class role extends plugin {
           fnc: 'roleList'
         },
         {
-          reg: '^#?(角色2|宝箱|成就|尘歌壶|家园|探索|探险|声望|探险度|探索度)[ |0-9]*$',
+          reg: '^#?(家园|探索|声望|探索度)[ |0-9]*$',
           fnc: 'roleExplore'
         }
       ]

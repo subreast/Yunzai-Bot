@@ -10,11 +10,11 @@
       title: '#深渊 #深渊12层'
       desc: 深渊数据，打完请2小时后查询
     - icon: weapon
-      title: '#五星 #武器 #今日素材'
+      title: '#五星 #武器 #练度统计'
       desc: 你的原神数据
     - icon: team
-      title: 五星列表、练度统计
-      desc: 你的原神角色数据
+      title: '#今日素材'
+      desc: 你今天可获取到的材料
     - icon: 树脂
       title: 体力
       desc: 查询体力，需要绑定cookie
@@ -32,11 +32,11 @@
       desc: 绑定查看游戏uid
 - group: 其他查询指令
   list:
-    - icon: 原石
-      title: 抽卡记录 记录帮助
-      desc: 统计游戏抽卡数据
+    - icon: role
+      title: 添加xx别名 删除别名xx xx别名
+      desc: 修改角色别名
     - icon: 绑定账号
-      title: '#绑定ck #删除ck #ck状态'
+      title: '绑定ck 删除ck ck状态'
       desc: 查询ck信息
     - icon: 记录
       title: 充值记录
@@ -45,8 +45,8 @@
       title: 前瞻兑换码
       desc: 获取前瞻兑换码
     - icon: 星辉
-      title: 角色统计 武器统计
-      desc: 按卡池统计抽卡数据
+      title: 角色统计/记录 武器统计/记录
+      desc: 抽卡记录数据
     - icon: excel
       title: 导出记录、导入记录
       desc: 导出或导入xlsx、json抽卡记录
@@ -60,11 +60,11 @@
       title: 刻晴攻略 mys刻晴
       desc: 西风驿站攻略图
     - icon: 米游社
-      title: '#星铁/原神公告 #星铁/原神资讯 #星铁/原神活动'
+      title: '原神公告 原神资讯 原神活动'
       desc: '米游社公告资讯活动'
     - icon: 史莱姆
-      title: '#添加哈哈 #删除哈哈'
+      title: '添加哈哈 删除哈哈'
       desc: 添加表情，回复哈哈触发
     - icon: 问号
-      title: '#表情列表 #表情哈哈'
+      title: '表情列表 表情哈哈'
       desc: 查看，搜索添加的表情
