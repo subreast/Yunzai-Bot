@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import gsCfg from '../model/gsCfg.js'
 import puppeteer from '../../../lib/puppeteer/puppeteer.js'
 import RoleIndex from '../model/roleIndex.js'
-import RoleDetail from '../model/roleDetail.js'
 import Abyss from '../model/abyss.js'
 import Weapon from '../model/weapon.js'
 import RoleBag from '../model/roleBag.js'
@@ -19,10 +18,6 @@ export class role extends plugin {
         {
           reg: '^(#?(角色|角色查询|人物)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)|(^#?[\\+|＋]*[1|2|5-9][0-9]{8})',
           fnc: 'roleIndex'
-        },
-        {
-          reg: '^#?角色详情[0-9]*$',
-          fnc: 'roleDetail'
         },
         {
           reg: '^#?角色卡片$',
@@ -73,9 +68,6 @@ export class role extends plugin {
       fs.copyFileSync('./plugins/genshin/defSet/mys/set.yaml', set)
     }
 
-    if (!fs.existsSync('./data/roleDetail')) {
-      fs.mkdirSync('./data/roleDetail')
-    }
   }
 
   /** 接受到消息都会先执行一次 */
@@ -105,14 +97,6 @@ export class role extends plugin {
     if (img) await this.reply(img)
   }
 
-  /** 刻晴 */
-  async roleDetail () {
-    let data = await RoleDetail.get(this.e)
-    if (!data) return
-
-    let img = await puppeteer.screenshot('roleDetail', data)
-    if (img) await this.reply(img)
-  }
 
   /** 深渊 */
   async abyss () {

@@ -9,7 +9,7 @@ export class material extends plugin {
   constructor () {
     super({
       name: '角色素材',
-      dsc: '角色养成突破素材，来自米游社友人A',
+      dsc: '角色养成突破素材',
       event: 'message',
       priority: 500,
       rule: [
