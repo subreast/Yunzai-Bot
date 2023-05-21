@@ -258,8 +258,8 @@ class GsCfg {
 
   /**
    * 获取消息内原神角色名称，uid
-   * @param msg 判断消息
-   * @param filterMsg 过滤消息
+   * @param msg 消息
+   * @param filterMsg 清除的字符
    * @return roleId 角色id
    * @return name 角色名称
    * @return alias 当前别名

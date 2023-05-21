@@ -44,7 +44,6 @@ export class abbrSet extends plugin {
     if (!role) return false
     this.e.role = role
     this.setContext('setAbbr')
-
     await this.reply(`请发送${role.alias}别名，多个用空格隔开`)
   }
 
