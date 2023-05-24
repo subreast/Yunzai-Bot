@@ -10,7 +10,7 @@ export class abbrSet extends plugin {
       name: '别名设置',
       dsc: '角色别名设置',
       event: 'message',
-      priority: 600,
+      priority: 100,
       rule: [
         {
           reg: '^#?(设置|配置|添加)(.*)(别名|昵称)$',
