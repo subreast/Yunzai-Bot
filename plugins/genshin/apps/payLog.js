@@ -65,7 +65,7 @@ export class payLog extends plugin {
       return true
     } else {
       // 没有就获取
-      this.reply('当前绑定的uid未获取数据，请私聊获取')
+      this.reply('当前绑定的uid未获取数据')
       return false
     }
   }
@@ -88,7 +88,7 @@ export class payLog extends plugin {
     this.authKey = url.parse(userUrl, true, true).query.authkey
 
     // 获取数据
-    this.reply('正在获取消费数据,可能需要30s~~')
+    this.reply('正在获取消费数据,请等待~~')
     let data = new PayData(this.authKey)
     let imgData = await data.filtrateData()
     if (imgData?.errorMsg) {
@@ -118,7 +118,7 @@ export class payLog extends plugin {
       // 读抽卡链接的authkey
       this.authKey = await redis.get(`Yz:genshin:payLog:${uid}`) || await redis.get(`Yz:genshin:gachaLog:url:${uid}`)
       if (this.authKey) {
-        this.reply('正在获取数据,可能需要30s')
+        this.reply('正在获取数据,请等待~')
         let imgData = await new PayData(this.authKey).filtrateData()
         if (imgData?.errorMsg) {
           this.reply(imgData.errorMsg)

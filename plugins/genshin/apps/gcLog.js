@@ -186,20 +186,10 @@ export class gcLog extends plugin {
   }
 
   async help() {
-    await this.e.reply(segment.image(`file:///${_path}/resources/logHelp/记录帮助.png`))
+    await this.e.reply('发送【#更新抽卡记录】获取最新抽卡信息\n发送【#角色记录】【#角色统计】\n【#武器记录】【#武器统计】\n【#常驻记录】【常驻信息】\n以不同形式查看不同卡池抽卡信息')
   }
 
-  async helpPort() {
-    let msg = this.e.msg.replace(/#|帮助/g, '')
 
-    if (['电脑', 'pc'].includes(msg)) {
-      await this.e.reply(segment.image(`file:///${_path}/resources/logHelp/记录帮助-电脑.png`))
-    } else if (['安卓'].includes(msg)) {
-      await this.e.reply(`安卓抽卡记录获取教程：${this.androidUrl}`)
-    } else if (['苹果', 'ios'].includes(msg)) {
-      await this.e.reply(segment.image(`file:///${_path}/resources/logHelp/记录帮助-苹果.png`))
-    }
-  }
   srHead = (url, data) => {
     let name = url
     return name
