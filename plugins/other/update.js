@@ -19,11 +19,11 @@ export class update extends plugin {
       priority: 4000,
       rule: [
         {
-          reg: '^#?更新日志$',
+          reg: '^#?(云崽)?更新日志$',
           fnc: 'updateLog'
         },
         {
-          reg: '^#?(强制)*更新(.*)',
+          reg: '^#?(云崽)?(强制)?更新(.*)',
           fnc: 'update'
         },
         {
@@ -59,8 +59,7 @@ export class update extends plugin {
 
     /** 是否需要重启 */
     if (this.isUp) {
-      // await this.reply('即将执行重启，以应用更新')
-      setTimeout(() => this.restart(), 2000)
+      setTimeout(() => this.restart(), 1000)
     }
   }
 
@@ -104,7 +103,7 @@ export class update extends plugin {
     let type = '更新'
     if (this.e.msg.includes('强制')) {
       type = '强制更新'
-      cm = `git reset --hard origin/master && ${cm}`
+      cm = `git fetch --all && git reset --hard && ${cm}`
     }
 
     if (plugin) {
@@ -215,7 +214,6 @@ export class update extends plugin {
     }
 
     if (this.isUp) {
-      // await this.reply('即将执行重启，以应用更新')
       setTimeout(() => this.restart(), 2000)
     }
   }
