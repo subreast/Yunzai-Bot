@@ -13,7 +13,7 @@ export class newcomer extends plugin {
   /** 接受到消息都会执行一次 */
   async accept () {
     /** 定义入群欢迎内容 */
-    let msg = '欢迎新人！'
+    let msg = '欢迎新人！\n可发送【#帮助】【#喵喵帮助】【*帮助】【#图鉴帮助】【#群管帮助】【#土块帮助】查看各功能使用说明\n发现各种bug或者问题可以加主人(1556841)好友反馈'
     /** 冷却cd 30s */
     let cd = 30
 
