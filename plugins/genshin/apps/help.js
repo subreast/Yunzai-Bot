@@ -14,7 +14,7 @@ export class help extends plugin {
       name: '云崽帮助',
       dsc: '云崽帮助',
       event: 'message',
-      priority: 500,
+      priority: 100,
       rule: [
         {
           reg: '^#?(云崽)*(命令|帮助|菜单|help|说明|功能|指令|使用说明)$',

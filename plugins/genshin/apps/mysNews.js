@@ -12,7 +12,7 @@ export class mysNews extends plugin {
       name: '米游社公告',
       dsc: '#公告 #资讯 #活动',
       event: 'message',
-      priority: 700,
+      priority: 100,
       rule: [
         {
           reg: '^(#?米游社|#?mys)(.*)',

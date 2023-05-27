@@ -12,7 +12,7 @@ export class dailyNote extends plugin {
       name: '查询',
       dsc: '原神体力、札记查询，米游社签到',
       event: 'message',
-      priority: 300,
+      priority: 100,
       rule: [
         {
           reg: '^#?(原神)?(体力|树脂|查询体力)$',

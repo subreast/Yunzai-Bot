@@ -9,7 +9,7 @@ export class exchange extends plugin {
       name: '兑换码',
       dsc: '前瞻直播兑换码',
       event: 'message',
-      priority: 1000,
+      priority: 100,
       rule: [
         {
           reg: '^#?(直播|前瞻)*兑换码$',

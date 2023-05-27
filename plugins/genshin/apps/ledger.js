@@ -9,7 +9,7 @@ export class ledger extends plugin {
       name: '札记查询',
       dsc: '原神体米游社札记原神查询',
       event: 'message',
-      priority: 300,
+      priority: 100,
       rule: [
         {
           reg: '^(#?原石|#?札记)([0-9]|[一二两三四五六七八九十]+)*月*$',

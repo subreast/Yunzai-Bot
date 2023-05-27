@@ -10,7 +10,7 @@ export class calculator extends plugin {
       name: '养成计算',
       dsc: '角色养成材料计算器',
       event: 'message',
-      priority: 700,
+      priority: 100,
       rule: [
         {
           reg: '^#?角色(养成|计算|养成计算)$',

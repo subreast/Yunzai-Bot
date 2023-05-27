@@ -11,7 +11,7 @@ export class material extends plugin {
       name: '角色素材',
       dsc: '角色养成突破素材',
       event: 'message',
-      priority: 500,
+      priority: 100,
       rule: [
         {
           reg: '#?(.*)(突破|材料|素材)$',
