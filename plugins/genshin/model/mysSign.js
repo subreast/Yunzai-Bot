@@ -445,7 +445,7 @@ export default class MysSign extends base {
 
     gsCfg.saveBingCk(this.e.user_id, ck)
 
-    let msg = `uid:${autoCk.uid}，原神自动签到已${model}`
+    let msg = `uid:${autoCk.uid}，自动签到已${model}`
     if (model == '开启') {
       msg += '\n每天将为你自动签到~'
     }
