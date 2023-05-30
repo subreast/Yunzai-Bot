@@ -19,7 +19,7 @@ class GsCfg {
     /** 监听文件 */
     this.watcher = { config: {}, defSet: {} }
 
-    this.ignore = ['mys.pubCk', 'gacha.set', 'bot.help', 'role.name']
+    this.ignore = ['mys.pubCk', 'gacha.set', 'bot.help', 'role. ']
   }
 
   /**
