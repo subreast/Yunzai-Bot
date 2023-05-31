@@ -36,7 +36,7 @@ export class role extends plugin {
           fnc: 'weapon'
         },
         {
-          reg: '^#?(五星|四星|5星|4星|5\*|4\*|命座)[ |0-9]*$',
+          reg: '^#?(五星|四星|5星|4星|5\\*|4\\*|命座)[ |0-9]*$',
           fnc: 'roleBag'
         },
         {
