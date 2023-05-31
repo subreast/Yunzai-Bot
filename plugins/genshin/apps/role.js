@@ -16,7 +16,7 @@ export class role extends plugin {
       priority: 200,
       rule: [
         {
-          reg: '^(#?(米游社数据|mys|mys数据)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)',
+          reg: '^(#?(米游社数据|mys|mys数据|米游社)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)',
           fnc: 'roleIndex'
         },
         {
