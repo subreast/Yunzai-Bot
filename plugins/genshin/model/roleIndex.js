@@ -35,29 +35,29 @@ export default class RoleIndex extends base {
         return await roleIndex.getIndex()
     }
 
-    // async getIndex() {
-    //     let ApiData = {
-    //         index: '',
-    //         spiralAbyss: { schedule_type: 1 },
-    //         character: '',
-    //         basicInfo: ''
-    //     }
-    //     let res = await MysInfo.get(this.e, ApiData)
+    async getIndex() {
+        let ApiData = {
+            index: '',
+            spiralAbyss: { schedule_type: 1 },
+            character: '',
+            basicInfo: ''
+        }
+        let res = await MysInfo.get(this.e, ApiData)
 
-    //     if (!res || res[0].retcode !== 0 || res[2].retcode !== 0) return false
+        if (!res || res[0].retcode !== 0 || res[2].retcode !== 0) return false
 
-    //     let ret = []
-    //     res.forEach(v => ret.push(v.data))
+        let ret = []
+        res.forEach(v => ret.push(v.data))
 
-    //     /** 截图数据 */
-    //     let data = {
-    //         quality: 80,
-    //         ...this.screenData,
-    //         ...this.dealData(ret)
-    //     }
-    //     // console.log(...this.dealData(ret))
-    //     return data
-    // }
+        /** 截图数据 */
+        let data = {
+            quality: 80,
+            ...this.screenData,
+            ...this.dealData(ret)
+        }
+        // console.log(...this.dealData(ret))
+        return data
+    }
 
     // dealData(data) {
     //     let [resIndex, resAbyss, resDetail, basicInfo] = data
