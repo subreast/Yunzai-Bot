@@ -9,12 +9,12 @@ const _path = process.cwd()
 let emoticon
 
 export default class MysNews extends base {
-  constructor (e) {
+  constructor(e) {
     super(e)
     this.model = 'mysNews'
   }
 
-  async getNews () {
+  async getNews() {
     let type = 1
     let typeName = '公告'
     if (this.e.msg.includes('资讯')) {
@@ -49,7 +49,7 @@ export default class MysNews extends base {
     return await this.replyMsg(img, `原神${typeName}：${param.data.post.subject}`)
   }
 
-  async rander (param) {
+  async rander(param) {
     const pageHeight = 7000
 
     await puppeteer.browserInit()
@@ -126,7 +126,7 @@ export default class MysNews extends base {
     }
   }
 
-  async newsDetail (postId) {
+  async newsDetail(postId) {
     const res = await this.postData('getPostFull', { gids: 2, read: 1, post_id: postId })
     if (!res) return
 
@@ -140,7 +140,7 @@ export default class MysNews extends base {
     }
   }
 
-  postApi (type, data) {
+  postApi(type, data) {
     let host = 'https://bbs-api-static.mihoyo.com/'
     let param = []
     lodash.forEach(data, (v, i) => param.push(`${i}=${v}`))
@@ -165,7 +165,7 @@ export default class MysNews extends base {
     return host + param
   }
 
-  async postData (type, data) {
+  async postData(type, data) {
     const url = this.postApi(type, data)
     const headers = {
       Referer: 'https://bbs.mihoyo.com/',
@@ -187,7 +187,7 @@ export default class MysNews extends base {
     return res
   }
 
-  async detalData (data) {
+  async detalData(data) {
     let json
     try {
       json = JSON.parse(data.post.content)
@@ -234,7 +234,7 @@ export default class MysNews extends base {
     return data
   }
 
-  async mysEmoticon () {
+  async mysEmoticon() {
     const emp = new Map()
 
     const res = await this.postData('emoticon', { gids: 2 })
@@ -254,40 +254,8 @@ export default class MysNews extends base {
     return emp
   }
 
-  async mysSearch () {
-    let msg = this.e.msg
-    msg = msg.replace(/#|米游社|mys/g, '')
 
-    if (!msg) {
-      await this.e.reply('请输入关键字，如#米游社七七')
-      return false
-    }
-
-    let page = msg.match(/.*(\d){1}$/) || 0
-    if (page && page[1]) {
-      page = page[1]
-    }
-
-    msg = lodash.trim(msg, page)
-
-    let res = await this.postData('searchPosts', { gids: 2, size: 20, keyword: msg })
-    if (!res) return
-
-    if (res?.data?.posts.length <= 0) {
-      await this.e.reply('搜索不到您要的结果，换个关键词试试呗~')
-      return false
-    }
-
-    let postId = res.data.posts[page].post.post_id
-
-    const param = await this.newsDetail(postId)
-
-    const img = await this.rander(param)
-
-    return await this.replyMsg(img, `${param.data.post.subject}`)
-  }
-
-  async mysUrl () {
+  async mysUrl() {
     let msg = this.e.msg
     let postId = /[0-9]+/g.exec(msg)[0]
 
@@ -300,7 +268,7 @@ export default class MysNews extends base {
     return await this.replyMsg(img, `${param.data.post.subject}`)
   }
 
-  async ysEstimate () {
+  async ysEstimate() {
     let msg = '版本原石盘点'
     let res = await this.postData('searchPosts', { gids: 2, size: 20, keyword: msg })
     if (res?.data?.posts.length <= 0) {
@@ -331,7 +299,7 @@ export default class MysNews extends base {
     return await this.replyMsg(img, `${param.data.post.subject}`)
   }
 
-  async replyMsg (img, titile) {
+  async replyMsg(img, titile) {
     if (!img || img.length <= 0) return false
     if (img.length == 1) {
       return img[0]
@@ -343,52 +311,8 @@ export default class MysNews extends base {
     }
   }
 
-  async mysNewsTask (type = 1) {
-    let cfg = gsCfg.getConfig('mys', 'pushNews')
 
-    // 推送2小时内的公告资讯
-    let interval = 7200
-    // 最多同时推送两条
-    this.maxNum = cfg.maxNum
-    // 包含关键字不推送
-    let banWord = /冒险助力礼包|纪行|预下载|脚本外挂|集中反馈|已开奖|云·原神|魔神任务|传说任务说明/g
-
-    let anno = await this.postData('getNewsList', { gids: 2, page_size: 10, type: 1 })
-    let info = await this.postData('getNewsList', { gids: 2, page_size: 10, type: 3 })
-
-    let news = []
-    if (anno) anno.data.list.forEach(v => { news.push({ ...v, typeName: '公告', post_id: v.post.post_id }) })
-    if (info) info.data.list.forEach(v => { news.push({ ...v, typeName: '资讯', post_id: v.post.post_id }) })
-    if (news.length <= 0) return
-
-    news = lodash.orderBy(news, ['post_id'], ['asc'])
-
-    let now = Date.now() / 1000
-
-    this.key = 'Yz:genshin:mys:newPush:'
-    this.e.isGroup = true
-    this.pushGroup = []
-    for (let val of news) {
-      if (Number(now - val.post.created_at) > interval) {
-        continue
-      }
-      if (new RegExp(banWord).test(val.post.subject)) {
-        continue
-      }
-      if (val.typeName == '公告') {
-        for (let groupId of cfg.announceGroup) {
-          await this.sendNews(groupId, val.typeName, val.post.post_id)
-        }
-      }
-      if (val.typeName == '资讯') {
-        for (let groupId of cfg.infoGroup) {
-          await this.sendNews(groupId, val.typeName, val.post.post_id)
-        }
-      }
-    }
-  }
-
-  async sendNews (groupId, typeName, postId) {
+  async sendNews(groupId, typeName, postId) {
     if (!this.pushGroup[groupId]) this.pushGroup[groupId] = 0
     if (this.pushGroup[groupId] >= this.maxNum) return
 

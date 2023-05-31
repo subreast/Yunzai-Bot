@@ -7,17 +7,13 @@ import YAML from 'yaml'
 
 gsCfg.cpCfg('mys', 'pushNews')
 export class mysNews extends plugin {
-  constructor (e) {
+  constructor(e) {
     super({
       name: '米游社公告',
       dsc: '#公告 #资讯 #活动',
       event: 'message',
       priority: 100,
       rule: [
-        {
-          reg: '^(#?米游社|#?mys)(.*)',
-          fnc: 'mysSearch'
-        },
         {
           reg: '(.*)(bbs.mihoyo.com|miyoushe.com)/ys(.*)/article(.*)',
           fnc: 'mysUrl'
@@ -33,11 +29,6 @@ export class mysNews extends plugin {
         {
           reg: '^#?(开启|关闭)原神(公告|资讯)推送$',
           fnc: 'setPush'
-        },
-        {
-          reg: '^#?推送(公告|资讯)$',
-          permission: 'master',
-          fnc: 'mysNewsTask'
         }
       ]
     })
@@ -55,45 +46,32 @@ export class mysNews extends plugin {
     ]
   }
 
-  async init () {
+  async init() {
     if (fs.existsSync(this.file)) return
 
     fs.copyFileSync('./plugins/genshin/defSet/mys/pushNews.yaml', this.file)
   }
 
-  async news () {
+  async news() {
     let data = await new MysNews(this.e).getNews()
     if (!data) return
     await this.reply(data)
   }
 
-  async mysNewsTask () {
-    let mysNews = new MysNews(this.e)
-    await mysNews.mysNewsTask()
-  }
-
-
-  async mysSearch () {
-    if (/签到/g.test(this.e.msg)) return false
-    let data = await new MysNews(this.e).mysSearch()
-    if (!data) return
-    await this.reply(data)
-  }
-
-  async mysUrl () {
+  async mysUrl() {
     let data = await new MysNews(this.e).mysUrl()
     if (!data) return
     await this.reply(data)
   }
 
-  async ysEstimate () {
+  async ysEstimate() {
     let data = await new MysNews(this.e).ysEstimate()
     if (!data) return
     await this.reply(data)
   }
 
 
-  async setPush () {
+  async setPush() {
     if (!this.e.isGroup) {
       await this.reply('推送请在群聊中设置')
       return

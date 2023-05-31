@@ -162,6 +162,14 @@ class GsCfg {
     return ''
   }
 
+  /** 原神角色别名转id */
+  roleNameToID(keyword) {
+    if (!isNaN(keyword)) keyword = Number(keyword)
+    this.getAbbr()
+    let roelId = this.nameID.get(String(keyword))
+    return roelId || false
+  }
+
   /**
    * 原神武器id转换成武器名字
    */
@@ -174,13 +182,7 @@ class GsCfg {
     return weaponData
   }
 
-  /** 原神角色别名转id */
-  roleNameToID(keyword) {
-    if (!isNaN(keyword)) keyword = Number(keyword)
-    this.getAbbr()
-    let roelId = this.nameID.get(String(keyword))
-    return roelId || false
-  }
+
 
   /** 获取角色别名 */
   getAbbr() {
