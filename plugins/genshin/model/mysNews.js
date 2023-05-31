@@ -299,6 +299,8 @@ export default class MysNews extends base {
     return await this.replyMsg(img, `${param.data.post.subject}`)
   }
 
+
+
   async replyMsg(img, titile) {
     if (!img || img.length <= 0) return false
     if (img.length == 1) {
@@ -311,6 +313,50 @@ export default class MysNews extends base {
     }
   }
 
+  async mysNewsTask(type = 1) {
+    let cfg = gsCfg.getConfig('mys', 'pushNews')
+
+    // 推送2小时内的公告资讯
+    let interval = 7200
+    // 最多同时推送两条
+    this.maxNum = cfg.maxNum
+    // 包含关键字不推送
+    let banWord = /冒险助力礼包|纪行|预下载|脚本外挂|集中反馈|已开奖|云·原神|魔神任务|传说任务说明/g
+
+    let anno = await this.postData('getNewsList', { gids: 2, page_size: 10, type: 1 })
+    let info = await this.postData('getNewsList', { gids: 2, page_size: 10, type: 3 })
+
+    let news = []
+    if (anno) anno.data.list.forEach(v => { news.push({ ...v, typeName: '公告', post_id: v.post.post_id }) })
+    if (info) info.data.list.forEach(v => { news.push({ ...v, typeName: '资讯', post_id: v.post.post_id }) })
+    if (news.length <= 0) return
+
+    news = lodash.orderBy(news, ['post_id'], ['asc'])
+
+    let now = Date.now() / 1000
+
+    this.key = 'Yz:genshin:mys:newPush:'
+    this.e.isGroup = true
+    this.pushGroup = []
+    for (let val of news) {
+      if (Number(now - val.post.created_at) > interval) {
+        continue
+      }
+      if (new RegExp(banWord).test(val.post.subject)) {
+        continue
+      }
+      if (val.typeName == '公告') {
+        for (let groupId of cfg.announceGroup) {
+          await this.sendNews(groupId, val.typeName, val.post.post_id)
+        }
+      }
+      if (val.typeName == '资讯') {
+        for (let groupId of cfg.infoGroup) {
+          await this.sendNews(groupId, val.typeName, val.post.post_id)
+        }
+      }
+    }
+  }
 
   async sendNews(groupId, typeName, postId) {
     if (!this.pushGroup[groupId]) this.pushGroup[groupId] = 0
