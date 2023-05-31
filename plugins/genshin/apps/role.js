@@ -16,12 +16,8 @@ export class role extends plugin {
       priority: 200,
       rule: [
         {
-          reg: '^(#?(角色|角色查询|人物)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)',
+          reg: '^(#?(米游社数据|mys|mys数据)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)',
           fnc: 'roleIndex'
-        },
-        {
-          reg: '^#?角色卡片$',
-          fnc: 'roleCard'
         },
         {
           reg: '^#?[上期|往期|本期]*(深渊|深境|深境螺旋)[上期|往期|本期]*[ |0-9]*$',
@@ -36,16 +32,12 @@ export class role extends plugin {
           fnc: 'weapon'
         },
         {
-          reg: '^#?(五星|四星|5星|4星|5\\*|4\\*|命座)[ |0-9]*$',
+          reg: '^#?(五星|5星|5\\*|命座)[ |0-9]*$',
           fnc: 'roleBag'
         },
         {
-          reg: '^#?(我的)*(技能|天赋|武器|角色|练度|五|四|5|4|星)+(汇总|统计|列表)(force|五|四|5|4|星)*[ |0-9]*$',
+          reg: '^#?练度统计[ |0-9]*$',
           fnc: 'roleList'
-        },
-        {
-          reg: '^#?(家园|探索|声望|探索度)[ |0-9]*$',
-          fnc: 'roleExplore'
         }
       ]
     })
@@ -143,21 +135,4 @@ export class role extends plugin {
     if (img) await this.reply(img)
   }
 
-  /** 角色卡片 */
-  async roleCard() {
-    let data = await new RoleIndex(this.e).roleCard()
-    if (!data) return
-
-    let img = await puppeteer.screenshot('roleCard', data)
-    if (img) await this.reply(img)
-  }
-
-  /** 探险 */
-  async roleExplore() {
-    let data = await new RoleIndex(this.e).roleExplore()
-    if (!data) return
-
-    let img = await puppeteer.screenshot('roleExplore', data)
-    if (img) await this.reply(img)
-  }
 }

@@ -1,7 +1,7 @@
 - group: 原神查询指令
   list:
     - icon: role
-      title: '#角色 #探索 #角色卡片'
+      title: '#米游社数据|mys'
       desc: '原神角色、探索度数据'
     - icon: paimon
       title: '#刻晴 #刻晴卡片'
