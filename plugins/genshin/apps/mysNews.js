@@ -46,6 +46,11 @@ export class mysNews extends plugin {
     ]
   }
 
+  async mysNewsTask() {
+    let mysNews = new MysNews(this.e)
+    await mysNews.mysNewsTask()
+  }
+
   async init() {
     if (fs.existsSync(this.file)) return
 
