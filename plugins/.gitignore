@@ -16,6 +16,7 @@ other/**
 !other/setPubCk.js
 
 !example
+!example/**
 
 
 *.psd
