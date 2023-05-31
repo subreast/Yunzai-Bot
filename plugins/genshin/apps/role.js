@@ -6,6 +6,7 @@ import Abyss from '../model/abyss.js'
 import Weapon from '../model/weapon.js'
 import RoleBag from '../model/roleBag.js'
 import RoleList from '../model/roleList.js'
+import RoleIndex from '../model/roleIndex.js'
 export class role extends plugin {
   constructor() {
     super({
