@@ -1,187 +1,206 @@
-import moment from "moment";
-import lodash from "lodash";
-import base from "./base.js";
-import MysInfo from "./mys/mysInfo.js";
+/** 导入plugin */
+import plugin from '../../../lib/plugins/plugin.js'
+import gsCfg from '../model/gsCfg.js'
+import common from '../../../lib/common/common.js'
+import lodash from 'lodash'
+import fs from 'node:fs'
+import fetch from 'node-fetch'
 
-export default class Note extends base {
-  constructor(e) {
-    super(e);
-    this.model = "dailyNote";
+gsCfg.cpCfg('mys', 'set')
+
+/**
+ * Modify By: ifeng0188
+ * 1.增加多个来源的攻略图
+ * 2.优化获取攻略图逻辑，更改为对比图片大小来寻找
+ * 3.增加攻略说明、设置默认攻略功能
+ */
+
+export class strategy extends plugin {
+  constructor() {
+    super({
+      name: '米游社攻略',
+      dsc: '米游社攻略图',
+      event: 'message',
+      priority: 100,
+      rule: [
+        {
+          reg: '^#?(更新)?\\S+攻略([1-4])?$',
+          fnc: 'strategy'
+        },
+        {
+          reg: '^#?攻略(说明|帮助)?$',
+          fnc: 'strategy_help'
+        },
+        {
+          reg: '^#?设置默认攻略([1-4])?$',
+          fnc: 'strategy_setting'
+        }
+      ]
+    })
+
+    this.set = gsCfg.getConfig('mys', 'set')
+
+    this.path = './temp/strategy'
+
+    this.url = 'https://bbs-api.mihoyo.com/post/wapi/getPostFullInCollection?&gids=2&order_type=2&collection_id='
+    this.collection_id = [
+      [],
+      // 来源：西风驿站
+      [839176, 839179, 839181, 1180811],
+      // 来源：原神观测枢
+      [813033],
+      // 来源：派蒙喵喵屋
+      [341284],
+      // 来源：OH是姜姜呀(需特殊处理)
+      [341523]
+    ]
+
+    this.source = ['西风驿站', '原神观测枢', '派蒙喵喵屋', 'OH是姜姜呀']
+
+    this.oss = '?x-oss-process=image//resize,s_1200/quality,q_90/auto-orient,0/interlace,1/format,jpg'
   }
 
-  /** 生成体力图片 */
-  static async get(e) {
-    let note = new Note(e);
-    return await note.getData();
-  }
-
-  async getData() {
-    let res = await MysInfo.get(this.e, "dailyNote");
-    let resUser;
-    if (!res || res.retcode !== 0) return false;
-    /** 截图数据 */
-    let data = this.noteData(res);
-    let screenData = this.screenData;
-    return {
-      name: this.e.sender.card,
-      quality: 80,
-      ...screenData,
-      ...data,...resUser?.data
-    };
-  }
-  noteSr(res) {
-    let { data } = res;
-    let nowDay = moment().date();
-    let nowUnix = Number(moment().format("X"));
-    /** 树脂 */
-    let resinMaxTime;
-    if (data.stamina_recover_time > 0) {
-      let d = moment.duration(data.stamina_recover_time, 'seconds');
-      let day= Math.floor(d.asDays());
-      let hours =d.hours()
-      let minutes =d.minutes()
-      let seconds =d.seconds()
-      resinMaxTime = hours+'小时'+minutes+'分钟'+seconds+'秒'
-      //精确到秒。。。。
-      if(day>0){
-        resinMaxTime =day+'天'+hours+'小时'+minutes+'分钟'+seconds+'秒'
-      }else if(hours>0){
-        resinMaxTime = hours+'小时'+minutes+'分钟'+seconds+'秒'
-      }else if(minutes>0){
-        resinMaxTime = minutes+'分钟'+seconds+'秒'
-      }else if(seconds>0){
-        resinMaxTime = seconds+'秒'
+  /** 初始化创建配置文件 */
+  async init() {
+    if (!fs.existsSync(this.path)) {
+      fs.mkdirSync(this.path)
+    }
+    /** 初始化子目录 */
+    for (let subId of [1, 2, 3, 4]) {
+      let path = this.path + '/' + subId
+      if (!fs.existsSync(path)) {
+        fs.mkdirSync(path)
       }
     }
-    data.bfStamina = data.current_stamina / data.max_stamina * 100 +'%';
-    /** 派遣 */
-    for(let item of data.expeditions){
-      let d = moment.duration(item.remaining_time, 'seconds');
-      let day= Math.floor(d.asDays());
-      let hours =d.hours()
-      let minutes =d.minutes()
-      item.dateTime=([day+'天',hours+'时',minutes+'分'].filter(v => !['0天','0时','0分'].includes(v))).join('')
-      item.bfTime=(72000-item.remaining_time)/72000 *100 +'%'
-      if(item.avatars.length==1){
-        item.avatars.push('派遣头像')
-      }
-    }
-    // 标识属性图标~
-    let icon = lodash.sample(['希儿','白露','艾丝妲','布洛妮娅','姬子','卡芙卡','克拉拉','停云','佩拉','黑塔','希露瓦','银狼'])
-    let week = [
-      "星期日",
-      "星期一",
-      "星期二",
-      "星期三",
-      "星期四",
-      "星期五",
-      "星期六",
-    ];
-    let day = `${week[moment().day()]}`;
-    return {
-      uid: this.e.uid,
-      saveId: this.e.uid,icon,day,
-      resinMaxTime,nowDay:moment(new Date()).format('YYYY年MM月DD日'),
-      ...data,
-    };
   }
-  noteData(res) {
-    let { data } = res;
 
-    let nowDay = moment().date();
-    let nowUnix = Number(moment().format("X"));
+  /** #心海攻略 */
+  async strategy() {
+    let match = /^#?(更新)?(\S+)攻略([1-4])?$/.exec(this.e.msg)
 
-    /** 树脂 */
-    let resinMaxTime;
-    if (data.resin_recovery_time > 0) {
-      resinMaxTime = nowUnix + Number(data.resin_recovery_time);
+    // let isUpdate = !!this.e.msg.includes('更新')
+    let isUpdate = !!match[1]
+    let roleName = match[2]
+    let group = match[3] ? match[3] : this.set.defaultSource
 
-      let maxDate = moment.unix(resinMaxTime);
-      resinMaxTime = maxDate.format("HH:mm");
+    let role = gsCfg.getRole(roleName)
 
-      if (maxDate.date() != nowDay) {
-        resinMaxTime = `明天 ${resinMaxTime}`;
+    if (!role) return false
+
+    /** 主角特殊处理 */
+    if (['10000005', '10000007', '20000000'].includes(String(role.roleId))) {
+      let travelers = ['风主', '岩主', '雷主', '草主']
+      if (!travelers.includes(role.alias)) {
+        let msg = '请选择：'
+        for (let sub of travelers) {
+          msg += `${sub}攻略${group}、`
+        }
+        msg = msg.substring(0, msg.lastIndexOf('、'))
+        await this.e.reply(msg)
+        return
       } else {
-        resinMaxTime = ` ${resinMaxTime}`;
+        role.name = role.alias
       }
     }
 
-    /** 派遣 */
-    let remainedTime = "";
-    if (data.expeditions && data.expeditions.length >= 1) {
-      remainedTime = lodash.map(data.expeditions, "remained_time");
-      remainedTime = lodash.min(remainedTime);
+    this.sfPath = `${this.path}/${group}/${role.name}.jpg`
 
-      if (remainedTime > 0) {
-        remainedTime = nowUnix + Number(remainedTime);
-        let remainedDate = moment.unix(remainedTime);
-        remainedTime = remainedDate.format("HH:mm");
+    if (fs.existsSync(this.sfPath) && !isUpdate) {
+      await this.e.reply(segment.image(`file://${this.sfPath}`))
+      return
+    }
 
-        if (remainedDate.date() != nowDay) {
-          remainedTime = `明天 ${remainedTime}`;
-        } else {
-          remainedTime = ` ${remainedTime}`;
+    if (await this.getImg(role.name, group)) {
+      await this.e.reply(segment.image(`file://${this.sfPath}`))
+    }
+  }
+
+  /** #攻略帮助 */
+  async strategy_help() {
+    await this.e.reply('攻略帮助:\n#心海攻略[1234]\n#更新早柚攻略[1234]\n#设置默认攻略[1234]\n示例: 心海攻略4\n\n攻略来源:\n1——西风驿站\n2——原神观测枢\n3——派蒙喵喵屋\n4——OH是姜姜呀')
+  }
+
+  /** #设置默认攻略1 */
+  async strategy_setting() {
+    let match = /^#?设置默认攻略([1-4])?$/.exec(this.e.msg)
+    let set = './plugins/genshin/config/mys.set.yaml'
+    let config = fs.readFileSync(set, 'utf8')
+    let num = Number(match[1])
+    if (isNaN(num)) {
+      await this.e.reply('默认攻略设置方式为: \n#设置默认攻略[1234] \n 请增加数字1-4其中一个')
+      return
+    }
+    config = config.replace(/defaultSource: [1-4]/g, 'defaultSource: ' + num)
+    fs.writeFileSync(set, config, 'utf8')
+
+    await this.e.reply('默认攻略已设置为: ' + match[1])
+  }
+
+  /** 下载攻略图 */
+  async getImg(name, group) {
+    let msyRes = []
+    this.collection_id[group].forEach((id) => msyRes.push(this.getData(this.url + id)))
+
+    try {
+      msyRes = await Promise.all(msyRes)
+    } catch (error) {
+      this.e.reply('暂无攻略数据，请稍后再试')
+      logger.error(`米游社接口报错：${error}}`)
+      return false
+    }
+
+    let posts = lodash.flatten(lodash.map(msyRes, (item) => item.data.posts))
+    let url
+    for (let val of posts) {
+      /** 攻略图个别来源特殊处理 */
+      if (group == 4) {
+        if (val.post.structured_content.includes(name + '】')) {
+          let content = val.post.structured_content.replace(/\\\/\{\}/g, '')
+          let pattern = new RegExp(name + '】.*?image\\\\?":\\\\?"(.*?)\\\\?"');  // 常驻角色兼容
+          let imgId = pattern.exec(content)[1]
+          for (let image of val.image_list) {
+            if (image.image_id == imgId) {
+              url = image.url
+              break
+            }
+          }
+          break
+        }
+      } else {
+        if (val.post.subject.includes(name)) {
+          let max = 0
+          val.image_list.forEach((v, i) => {
+            if (Number(v.size) >= Number(val.image_list[max].size)) max = i
+          })
+          url = val.image_list[max].url
+          break
         }
       }
     }
 
-    /** 宝钱 */
-    let coinTime = "";
-    if (data.home_coin_recovery_time > 0) {
-      let coinDay = Math.floor(data.home_coin_recovery_time / 3600 / 24);
-      let coinHour = Math.floor((data.home_coin_recovery_time / 3600) % 24);
-      let coinMin = Math.floor((data.home_coin_recovery_time / 60) % 60);
-      if (coinDay > 0) {
-        coinTime = `${coinDay}天${coinHour}小时${coinMin}分钟`;
-      } else {
-        let coinDate = moment.unix(
-          nowUnix + Number(data.home_coin_recovery_time)
-        );
-
-        if (coinDate.date() != nowDay) {
-          coinTime = `明天 ${coinDate.format("HH:mm")}`;
-        } else {
-          coinTime = coinDate.format("HH:mm");
-        }
-      }
+    if (!url) {
+      this.e.reply(`暂无${name}攻略（${this.source[group - 1]}）\n请尝试其他的攻略来源查询\n#攻略帮助，查看说明`)
+      return false
     }
 
-    let week = [
-      "星期日",
-      "星期一",
-      "星期二",
-      "星期三",
-      "星期四",
-      "星期五",
-      "星期六",
-    ];
-    let day = `${moment().format("MM-DD HH:mm")} ${week[moment().day()]}`;
+    logger.mark(`${this.e.logFnc} 下载${name}攻略图`)
 
-    /** 参量质变仪 */
-    if (data?.transformer?.obtained) {
-      data.transformer.reached = data.transformer.recovery_time.reached;
-      let recoveryTime = "";
-
-      if (data.transformer.recovery_time.Day > 0) {
-        recoveryTime += `${data.transformer.recovery_time.Day}天`;
-      }
-      if (data.transformer.recovery_time.Hour > 0) {
-        recoveryTime += `${data.transformer.recovery_time.Hour}小时`;
-      }
-      if (data.transformer.recovery_time.Minute > 0) {
-        recoveryTime += `${data.transformer.recovery_time.Minute}分钟`;
-      }
-      data.transformer.recovery_time = recoveryTime;
+    if (!await common.downFile(url + this.oss, this.sfPath)) {
+      return false
     }
 
-    return {
-      uid: this.e.uid,
-      saveId: this.e.uid,
-      resinMaxTime,
-      remainedTime,
-      coinTime,
-      day,
-      ...data,
-    };
+    logger.mark(`${this.e.logFnc} 下载${name}攻略成功`)
+
+    return true
+  }
+
+  /** 获取数据 */
+  async getData(url) {
+    let response = await fetch(url, { method: 'get' })
+    if (!response.ok) {
+      return false
+    }
+    const res = await response.json()
+    return res
   }
 }
