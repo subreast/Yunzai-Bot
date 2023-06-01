@@ -498,18 +498,18 @@ export default class RoleIndex extends base {
     //     }
     // }
 
-    // initFile() {
-    //     if (imgFile['刻晴']) return imgFile
-    //     let path = './plugins/genshin/resources/img/gacha/'
-    //     let character = fs.readdirSync(path + 'character/')
-    //     let weapon = fs.readdirSync(path + 'weapon/')
+    initFile() {
+        if (imgFile['刻晴']) return imgFile
+        let path = './plugins/genshin/resources/img/gacha/'
+        let character = fs.readdirSync(path + 'character/')
+        let weapon = fs.readdirSync(path + 'weapon/')
 
-    //     let nameSet = (v) => {
-    //         let name = v.split('.')
-    //         imgFile[name[0]] = v
-    //     }
-    //     character.forEach(v => nameSet(v))
-    //     weapon.forEach(v => nameSet(v))
-    //     return imgFile
-    // }
+        let nameSet = (v) => {
+            let name = v.split('.')
+            imgFile[name[0]] = v
+        }
+        character.forEach(v => nameSet(v))
+        weapon.forEach(v => nameSet(v))
+        return imgFile
+    }
 }

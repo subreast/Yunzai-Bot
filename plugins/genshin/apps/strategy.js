@@ -76,6 +76,7 @@ export class strategy extends plugin {
 
   /** #心海攻略 */
   async strategy() {
+    console.log('开始执行')
     let match = /^#?(更新)?(\S+)攻略([1-4])?$/.exec(this.e.msg)
 
     // let isUpdate = !!this.e.msg.includes('更新')
@@ -102,7 +103,7 @@ export class strategy extends plugin {
         role.name = role.alias
       }
     }
-
+    console.log('准备获取路径')
     this.sfPath = `${this.path}/${group}/${role.name}.jpg`
 
     if (fs.existsSync(this.sfPath) && !isUpdate) {
