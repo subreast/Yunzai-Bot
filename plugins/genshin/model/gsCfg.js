@@ -19,7 +19,7 @@ class GsCfg {
     /** 监听文件 */
     this.watcher = { config: {}, defSet: {} }
 
-    this.ignore = ['mys.pubCk', 'gacha.set', 'bot.help', 'role. ']
+    this.ignore = ['mys.pubCk', 'gacha.set', 'bot.help', 'role.name']
   }
 
   /**
@@ -38,7 +38,6 @@ class GsCfg {
 
     return { ...this.getdefSet(app, name), ...this.getYaml(app, name, 'config') }
   }
-
 
   /**
    * 获取配置yaml
@@ -162,14 +161,6 @@ class GsCfg {
     return ''
   }
 
-  /** 原神角色别名转id */
-  roleNameToID(keyword) {
-    if (!isNaN(keyword)) keyword = Number(keyword)
-    this.getAbbr()
-    let roelId = this.nameID.get(String(keyword))
-    return roelId || false
-  }
-
   /**
    * 原神武器id转换成武器名字
    */
@@ -182,7 +173,13 @@ class GsCfg {
     return weaponData
   }
 
-
+  /** 原神角色别名转id */
+  roleNameToID(keyword) {
+    if (!isNaN(keyword)) keyword = Number(keyword)
+    this.getAbbr()
+    let roelId = this.nameID.get(String(keyword))
+    return roelId || false
+  }
 
   /** 获取角色别名 */
   getAbbr() {
@@ -260,8 +257,8 @@ class GsCfg {
 
   /**
    * 获取消息内原神角色名称，uid
-   * @param msg 消息
-   * @param filterMsg 清除的字符
+   * @param msg 判断消息
+   * @param filterMsg 过滤消息
    * @return roleId 角色id
    * @return name 角色名称
    * @return alias 当前别名
