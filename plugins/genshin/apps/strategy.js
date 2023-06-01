@@ -16,12 +16,12 @@ gsCfg.cpCfg('mys', 'set')
  */
 
 export class strategy extends plugin {
-  constructor () {
+  constructor() {
     super({
       name: '米游社攻略',
       dsc: '米游社攻略图',
       event: 'message',
-      priority: 500,
+      priority: 100,
       rule: [
         {
           reg: '^#?(更新)?\\S+攻略([1-4])?$',
@@ -61,7 +61,7 @@ export class strategy extends plugin {
   }
 
   /** 初始化创建配置文件 */
-  async init () {
+  async init() {
     if (!fs.existsSync(this.path)) {
       fs.mkdirSync(this.path)
     }
@@ -75,7 +75,7 @@ export class strategy extends plugin {
   }
 
   /** #心海攻略 */
-  async strategy () {
+  async strategy() {
     let match = /^#?(更新)?(\S+)攻略([1-4])?$/.exec(this.e.msg)
 
     // let isUpdate = !!this.e.msg.includes('更新')
@@ -116,19 +116,19 @@ export class strategy extends plugin {
   }
 
   /** #攻略帮助 */
-  async strategy_help () {
+  async strategy_help() {
     await this.e.reply('攻略帮助:\n#心海攻略[1234]\n#更新早柚攻略[1234]\n#设置默认攻略[1234]\n示例: 心海攻略4\n\n攻略来源:\n1——西风驿站\n2——原神观测枢\n3——派蒙喵喵屋\n4——OH是姜姜呀')
   }
 
   /** #设置默认攻略1 */
-  async strategy_setting () {
+  async strategy_setting() {
     let match = /^#?设置默认攻略([1-4])?$/.exec(this.e.msg)
     let set = './plugins/genshin/config/mys.set.yaml'
     let config = fs.readFileSync(set, 'utf8')
     let num = Number(match[1])
-    if(isNaN(num)) {
-		await this.e.reply('默认攻略设置方式为: \n#设置默认攻略[1234] \n 请增加数字1-4其中一个')
-		return
+    if (isNaN(num)) {
+      await this.e.reply('默认攻略设置方式为: \n#设置默认攻略[1234] \n 请增加数字1-4其中一个')
+      return
     }
     config = config.replace(/defaultSource: [1-4]/g, 'defaultSource: ' + num)
     fs.writeFileSync(set, config, 'utf8')
@@ -137,7 +137,7 @@ export class strategy extends plugin {
   }
 
   /** 下载攻略图 */
-  async getImg (name, group) {
+  async getImg(name, group) {
     let msyRes = []
     this.collection_id[group].forEach((id) => msyRes.push(this.getData(this.url + id)))
 
@@ -195,7 +195,7 @@ export class strategy extends plugin {
   }
 
   /** 获取数据 */
-  async getData (url) {
+  async getData(url) {
     let response = await fetch(url, { method: 'get' })
     if (!response.ok) {
       return false

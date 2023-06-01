@@ -4,12 +4,12 @@ import gsCfg from '../model/gsCfg.js'
 import User from '../model/user.js'
 
 export class user extends plugin {
-  constructor (e) {
+  constructor(e) {
     super({
       name: '用户绑定',
       dsc: '米游社ck绑定，游戏uid绑定',
       event: 'message',
-      priority: 300,
+      priority: 100,
       rule: [
         {
           reg: '^#?(ck|cookie)帮助',
@@ -54,7 +54,7 @@ export class user extends plugin {
     this.User = new User(e)
   }
 
-  async init () {
+  async init() {
     let file = './data/MysCookie'
     if (!fs.existsSync(file)) {
       fs.mkdirSync(file)
@@ -64,7 +64,7 @@ export class user extends plugin {
   }
 
   /** 接受到消息都会执行一次 */
-  accept () {
+  accept() {
     if (!this.e.msg) return
     // 由于手机端米游社网页可能获取不到ltuid 可以尝试在通行证页面获取login_uid
     if (/(ltoken|ltoken_v2)/.test(this.e.msg) && /(ltuid|login_uid|ltmid_v2)/.test(this.e.msg)) {
@@ -85,7 +85,7 @@ export class user extends plugin {
   }
 
   /** 绑定uid */
-  saveUid () {
+  saveUid() {
     if (!this.e.msg) return
     let uid = this.e.msg.match(/[1|2|5-9][0-9]{8}/g)
     if (!uid) {
@@ -98,23 +98,23 @@ export class user extends plugin {
   }
 
   /** 未登录ck */
-  async noLogin () {
+  async noLogin() {
     this.reply('绑定cookie失败\n可以发送【#ck帮助】查看绑定教程')
   }
 
   /** #ck代码 */
-  async ckCode () {
+  async ckCode() {
     await this.reply('javascript:(()=>{prompt(\'\',document.cookie)})();')
   }
 
   /** ck帮助 */
-  async ckHelp () {
+  async ckHelp() {
     let set = gsCfg.getConfig('mys', 'set')
     await this.reply(`请先绑定cookie，绑定方式如下：\n1：发送ck代码，获取教程${set.cookieDoc}获取后私聊发送\n2：使用命令【#扫码登陆】自动获取绑定，并可以使用命令【#刷新ck】失效刷新`)
   }
 
   /** 绑定ck */
-  async bingCk () {
+  async bingCk() {
     let set = gsCfg.getConfig('mys', 'set')
 
     if (!this.e.ck) {
@@ -126,18 +126,18 @@ export class user extends plugin {
   }
 
   /** 删除ck */
-  async delCk () {
+  async delCk() {
     let msg = await this.User.delCk()
     await this.reply(msg)
   }
 
   /** 绑定uid */
-  async bingUid () {
+  async bingUid() {
     await this.User.bingUid()
   }
 
   /** #uid */
-  async showUid () {
+  async showUid() {
     let index = this.e.msg.match(/[0-9]{1,2}/g)
     if (index && index[0]) {
       await this.User.toggleUid(index[0])
@@ -147,7 +147,7 @@ export class user extends plugin {
   }
 
   /** 我的ck */
-  async myCk () {
+  async myCk() {
     if (this.e.isGroup) {
       await this.reply('请私聊查看')
       return
@@ -156,12 +156,12 @@ export class user extends plugin {
   }
 
   /** 加载旧的绑定ck json */
-  loadOldData () {
+  loadOldData() {
     this.User.loadOldData()
   }
 
   /** 检查用户CK状态 **/
-  async checkCkStatus () {
+  async checkCkStatus() {
     await this.User.checkCkStatus()
   }
 }

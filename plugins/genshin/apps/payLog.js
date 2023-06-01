@@ -6,12 +6,12 @@ import path from 'path'
 import yaml from 'yaml'
 
 export class payLog extends plugin {
-  constructor () {
+  constructor() {
     super({
       name: '充值记录',
       dsc: '充值记录,消费记录,充值统计,消费统计',
       event: 'message',
-      priority: 299,
+      priority: 100,
       rule: [
         {
           reg: '^#?(充值|消费)(记录|统计)$',
@@ -33,7 +33,7 @@ export class payLog extends plugin {
   dirPath = path.resolve('./data/payLog/')
   authKey = ''
 
-  async payLog (e) {
+  async payLog(e) {
     // 判断是否存有已经生成的数据
     if (!fs.readdirSync(this.dirPath, 'utf-8').includes(e.user_id + '.yaml')) {
       // 如果没有则判断是否已经缓存了authkey，这个主要针对使用抽卡链接的，和苹果用户
@@ -71,7 +71,7 @@ export class payLog extends plugin {
   }
 
   // 获取authKey
-  async getAuthKey () {
+  async getAuthKey() {
     // 判断是否为群聊发送
     if (this.e.isGroup) {
       return false
@@ -108,7 +108,7 @@ export class payLog extends plugin {
   }
 
   /** 更新充值统计 */
-  async updatePayLog (e) {
+  async updatePayLog(e) {
     // 读一下uid
     let uid = await redis.get(`Yz:genshin:mys:qq-uid:${this.e.user_id}`)
     if (uid) {
@@ -139,7 +139,7 @@ export class payLog extends plugin {
 
 
   /** 判断主uid，若没有则返回false,有则返回主uid */
-  async isMain (id) {
+  async isMain(id) {
     const ckPath = path.resolve('./data/MysCookie')
     if (fs.readdirSync(ckPath, 'utf-8').includes(id + '.yaml')) {
       let ck = fs.readFileSync(ckPath + `/${id}.yaml`, 'utf-8')
@@ -153,7 +153,7 @@ export class payLog extends plugin {
   }
 
   /** 存储数据 */
-  async writeData (imgData) {
+  async writeData(imgData) {
     let userPath = this.dirPath + '/' + this.e.user_id + '.yaml'
     if (fs.readdirSync(this.dirPath).includes(`${this.e.user_id}.yaml`)) {
       let data = fs.readFileSync(userPath, 'utf-8')

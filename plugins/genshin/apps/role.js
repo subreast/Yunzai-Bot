@@ -13,7 +13,7 @@ export class role extends plugin {
       name: '角色查询',
       dsc: '原神角色信息查询',
       event: 'message',
-      priority: 200,
+      priority: 100,
       rule: [
         {
           reg: '^(#?(米游社数据|mys|mys数据|米游社|米友社|米友社数据)[ |0-9]*$)|(^(#?uid|#?UID)\\+*[1|2|5-9][0-9]{8}$)',
