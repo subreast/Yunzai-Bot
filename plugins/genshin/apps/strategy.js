@@ -85,7 +85,7 @@ export class strategy extends plugin {
     let group = match[3] ? match[3] : this.set.defaultSource
 
     let role = gsCfg.getRole(roleName)
-
+    console.log(role)
     if (!role) return false
 
     /** 主角特殊处理 */
