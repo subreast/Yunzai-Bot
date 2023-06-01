@@ -21,7 +21,7 @@ export class strategy extends plugin {
       name: '米游社攻略',
       dsc: '米游社攻略图',
       event: 'message',
-      priority: 100,
+      priority: 500,
       rule: [
         {
           reg: '^#?(更新)?\\S+攻略([1-4])?$',
@@ -40,7 +40,7 @@ export class strategy extends plugin {
 
     this.set = gsCfg.getConfig('mys', 'set')
 
-    this.path = './temp/strategy'
+    this.path = './data/strategy'
 
     this.url = 'https://bbs-api.mihoyo.com/post/wapi/getPostFullInCollection?&gids=2&order_type=2&collection_id='
     this.collection_id = [
