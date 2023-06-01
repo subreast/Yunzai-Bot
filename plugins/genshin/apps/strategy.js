@@ -77,7 +77,7 @@ export class strategy extends plugin {
   /** #心海攻略 */
   async strategy() {
     console.log('开始执行')
-    let match = /^#?(更新)?(\S+)攻略([1-4])?$/.exec(this.e.msg)
+    let match = /^(更新)?(\S+)攻略([1-4])?$/.exec(this.e.msg)
 
     // let isUpdate = !!this.e.msg.includes('更新')
     let isUpdate = !!match[1]
