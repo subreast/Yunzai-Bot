@@ -116,7 +116,7 @@ export class Restart extends plugin {
     await this.e.reply('关机成功，已停止运行')
 
     let npm = await this.checkPnpm()
-    exec(`${npm} stop`, { windowsHide: true }, (error, stdout, stderr) => {
+    exec(`${npm} stop`, { windowsHide: false }, (error, stdout, stderr) => {
       if (error) {
         this.e.reply(`操作失败！\n${error.stack}`)
         logger.error(`关机失败\n${error.stack}`)
