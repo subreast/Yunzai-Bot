@@ -5,7 +5,7 @@ const require = createRequire(import.meta.url)
 const { exec } = require('child_process')
 
 export class Restart extends plugin {
-  constructor (e = '') {
+  constructor(e = '') {
     super({
       name: '重启',
       dsc: '#?重启',
@@ -30,7 +30,7 @@ export class Restart extends plugin {
     this.key = 'Yz:restart'
   }
 
-  async init () {
+  async init() {
     let restart = await redis.get(this.key)
     if (restart && process.argv[1].includes('pm2')) {
       restart = JSON.parse(restart)
@@ -48,7 +48,7 @@ export class Restart extends plugin {
     }
   }
 
-  async restart () {
+  async restart() {
     await this.e.reply('开始执行重启，请稍等...')
     logger.mark(`${this.e.logFnc} 开始执行重启，请稍等...`)
 
@@ -90,22 +90,22 @@ export class Restart extends plugin {
     return true
   }
 
-  async checkPnpm () {
+  async checkPnpm() {
     let npm = 'npm'
     let ret = await this.execSync('pnpm -v')
     if (ret.stdout) npm = 'pnpm'
     return npm
   }
 
-  async execSync (cmd) {
+  async execSync(cmd) {
     return new Promise((resolve, reject) => {
-      exec(cmd, { windowsHide: true }, (error, stdout, stderr) => {
+      exec(cmd, { windowsHide: false }, (error, stdout, stderr) => {
         resolve({ error, stdout, stderr })
       })
     })
   }
 
-  async stop () {
+  async stop() {
     if (!process.argv[1].includes('pm2')) {
       logger.mark('关机成功，已停止运行')
       await this.e.reply('关机成功，已停止运行')

@@ -89,7 +89,7 @@ export class update extends plugin {
 
   async execSync(cmd) {
     return new Promise((resolve, reject) => {
-      exec(cmd, { windowsHide: true }, (error, stdout, stderr) => {
+      exec(cmd, { windowsHide: false }, (error, stdout, stderr) => {
         resolve({ error, stdout, stderr })
       })
     })
