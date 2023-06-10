@@ -134,7 +134,8 @@ export class abbrSet extends plugin {
       return true
     }
 
-    console.log('控制台打印' + nameArr[role.name]);
+    console.log('控制台打印1：' + nameArr[role.name]);
+    console.log('控制台打印1：' + nameArr[role.roleId][role.name]);
 
     nameArr[role.name] = nameArr[role.name].filter((v) => {
       if (v == role.alias) return false
