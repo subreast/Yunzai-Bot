@@ -129,7 +129,7 @@ export class abbrSet extends plugin {
 
     let nameArr = gsCfg.getdefSet('role', 'name')
 
-    if (!nameArr[role.name]) {
+    if (nameArr[role.name]) {
       await this.reply('默认别名设置，不能删除！')
       return true
     }
