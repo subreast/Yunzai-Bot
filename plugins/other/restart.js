@@ -66,10 +66,10 @@ export class Restart extends plugin {
       if (process.argv[1].includes('pm2')) {
         cm = `${npm} run restart`
       } else {
-        // await this.e.reply('当前为前台运行，重启将转为后台...')
+        await this.e.reply('当前为前台运行，重启将转为后台...')
       }
 
-      exec(cm, { windowsHide: false }, (error, stdout, stderr) => {
+      exec(cm, { windowsHide: true }, (error, stdout, stderr) => {
         if (error) {
           redis.del(this.key)
           this.e.reply(`操作失败！\n${error.stack}`)
@@ -99,7 +99,7 @@ export class Restart extends plugin {
 
   async execSync(cmd) {
     return new Promise((resolve, reject) => {
-      exec(cmd, { windowsHide: false }, (error, stdout, stderr) => {
+      exec(cmd, { windowsHide: true }, (error, stdout, stderr) => {
         resolve({ error, stdout, stderr })
       })
     })
@@ -116,7 +116,7 @@ export class Restart extends plugin {
     await this.e.reply('关机成功，已停止运行')
 
     let npm = await this.checkPnpm()
-    exec(`${npm} stop`, { windowsHide: false }, (error, stdout, stderr) => {
+    exec(`${npm} stop`, { windowsHide: true }, (error, stdout, stderr) => {
       if (error) {
         this.e.reply(`操作失败！\n${error.stack}`)
         logger.error(`关机失败\n${error.stack}`)
